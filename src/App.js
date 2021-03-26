@@ -1,5 +1,5 @@
 import './App.css';
-import { db } from './firestore';
+import { db } from './Firestore';
 
 function App() {
   const feedMeNow = () => {
