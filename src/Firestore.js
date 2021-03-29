@@ -15,33 +15,18 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
-const authProvider = new firebase.auth.GoogleAuthProvider()
+const authProvider = new firebase.auth.GoogleAuthProvider();
 export const auth = firebase.auth();
 
-export const signIn = (setValue) => {
+export const signIn = () => {
   auth
     .signInWithPopup(authProvider)
     .then((result) => {
-      // console.log(result.user);
-      setValue({
-        user: result.user,
-        credential: result.credential
-      });
+      console.log(result.user);
 
-      const ref = firestore.collection('user').doc(result.user.uid);
-      ref.get().then((doc) => {
-  
-        if (!doc.exists) {
-          ref.set({
-            name: result.user.displayName
-          })
-        } else {
-          console.log('Remy data:', doc.data());
-        }
-      });
-      // ...
     }).catch((error) => {
       // Handle Errors here.
+      console.log(error);
     });
 }
 export const signOut = (setValue) => {
