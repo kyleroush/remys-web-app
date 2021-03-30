@@ -60,9 +60,7 @@ class NavBar extends React.Component {
                       <AddIcon />
                     </IconButton>
                     <Menu {...bindMenu(popupState)}>
-                      <MenuItem>New Board</MenuItem>
-                      <MenuItem>New Team</MenuItem>
-                      <MenuItem>New Task</MenuItem>
+                      <MenuItem>Add User</MenuItem>
                     </Menu>
                   </React.Fragment>
                 )}
