@@ -1,7 +1,15 @@
 import './App.css';
 import { db, auth } from './Firestore';
 import NavBar from './navBar';
+import Feed from './Feed';
+import NotFound from './NotFound';
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+
 class App extends React.Component {
 
   constructor(props) {
@@ -19,16 +27,18 @@ class App extends React.Component {
     auth.onAuthStateChanged((user) => {
       this.setState({
         user,
-      })
-    });
-
-    db.ref('remy').on("value", snapshot => {
-      var {feed, last} = snapshot.val();
-      this.setState({
-        feed,
-        last
       });
-    }); 
+
+      if (user) {
+        db.ref('remy').on("value", snapshot => {
+          var {feed, last} = snapshot.val();
+          this.setState({
+            feed,
+            last
+          });
+        }); 
+      }
+    });
   }
 
   feedMeNow = () => {
@@ -44,15 +54,22 @@ class App extends React.Component {
     db.ref('remy').update({feed: null});
   }
   render() {
-    const feed  = this.state.feed;
+    const {feed, user}  = this.state;
 
     return (
       <div>
         <NavBar setValue={this.setValue} user={this.state.user} name={"Remy's Feeder"}/>
-        <button onClick={this.feedMeNow}>Feed Me! shNow!</button>
-        {feed && <p>currently waiting to feed remy</p>}
-        {feed && <button onClick={this.dontFeedMeNow}>on second thought</button>}
-
+        {user ? 
+          <Router>
+            <Switch>
+              <Route exact path="/" render={() => <Feed user={user} feed={feed} />} />
+              {/* <Route exact path="/admin" render={() => <Feed user={user} feed={feed} />} /> */}
+              <Route path='*' component={NotFound} />
+            </Switch>
+          </Router>
+        :
+          <h3>Log in please</h3>
+        }
       </div>
     );
   }
