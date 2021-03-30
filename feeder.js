@@ -1,6 +1,6 @@
 
 var firebase = require('firebase');
-const Gpio = require('pigpio').Gpio
+// const Gpio = require('pigpio').Gpio
 
 const firebaseConfig = {
   apiKey: "AIzaSyDQzso5Isi6OmiojfMp7yaLW-2nyXRguDo",
@@ -13,21 +13,24 @@ const firebaseConfig = {
   measurementId: "G-14M7P2M1P3"
 };
 
-const motor = new Gpio(17, {mode: Gpio.OUTPUT}) 
-
-
+// const motor = new Gpio(17, {mode: Gpio.OUTPUT}) 
 firebase.initializeApp(firebaseConfig);
+
+// firebase.auth().signInWithEmailAndPassword(email, password)
+
 // Update the document title using the browser API
 firebase.database().ref('remy/feed').on("value", snapshot => {
 
   const feed = snapshot.val();
 
-  if( remy > 0) {
+
+  if(feed) {
     const legnth = feed.legnth
     const speed = feed.speed
+
     motor.servoWrite(speed)
 
     setTimeout(() => { motor.servoWrite(0) }, legnth);
-    firebase.database().ref('remy').update(null);
+    firebase.database().ref('remy').update({feed: null, lastFed: Date.now().toString()});
   }
 });
