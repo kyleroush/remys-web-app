@@ -31,10 +31,10 @@ class App extends React.Component {
 
       if (user) {
         db.ref('remy').on("value", snapshot => {
-          var {feed, last} = snapshot.val();
+          var {feed, lastFed} = snapshot.val();
           this.setState({
             feed,
-            last
+            lastFed
           });
         }); 
       }
@@ -54,7 +54,7 @@ class App extends React.Component {
     db.ref('remy').update({feed: null});
   }
   render() {
-    const {feed, user}  = this.state;
+    const {feed, user, lastFed}  = this.state;
 
     return (
       <div>
@@ -62,7 +62,7 @@ class App extends React.Component {
         {user ? 
           <Router>
             <Switch>
-              <Route exact path="/" render={() => <Feed user={user} feed={feed} />} />
+              <Route exact path="/" render={() => <Feed user={user} feed={feed} lastFed={lastFed} />} />
               {/* <Route exact path="/admin" render={() => <Feed user={user} feed={feed} />} /> */}
               <Route path='*' component={NotFound} />
             </Switch>

@@ -30,6 +30,6 @@ firebase.database().ref('remy/feed').on("value", snapshot => {
     motor.servoWrite(speed)
 
     setTimeout(() => { motor.servoWrite(0) }, legnth);
-    firebase.database().ref('remy').update({feed: null, lastFed: Date.now().toString()});
+    firebase.database().ref('remy').update({feed: null, lastFed: Date.now().toJSON()});
   }
 });
